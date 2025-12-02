@@ -9,7 +9,7 @@ import { CartSidebar } from "@/components/CartSidebar";
 import { LocationsPage } from "@/components/LocationsPage";
 
 import { auth, db } from "@/lib/firebase";
-import { onAuthStateChanged, type User } from "firebase/auth";
+import { onAuthStateChanged, type User, signOut } from "firebase/auth";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 export type Service = {
@@ -102,13 +102,13 @@ export default function Page() {
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
-  // escuchar cambios login/logout
+  // Escuchar login/logout
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (u) => setUser(u));
     return () => unsub();
   }, []);
 
-  // cargar carrito
+  // Cargar carrito
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -116,7 +116,7 @@ export default function Page() {
     if (saved) setCart(JSON.parse(saved));
   }, []);
 
-  // guardar carrito
+  // Guardar carrito
   useEffect(() => {
     if (typeof window !== "undefined")
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
@@ -191,16 +191,15 @@ export default function Page() {
     }
   };
 
-  // 🔁 RECARGAR INTRO
+  // Recargar introducción
   const goToIntro = () => {
-    window.location.assign("/intro"); // 🔥 recarga completa
+    window.location.assign("/intro");
   };
 
   return (
     <div className="min-h-full bg-slate-900 text-slate-100">
       <header className="border-b border-slate-800 bg-slate-900/80 px-6 py-4">
         <div className="mx-auto max-w-6xl flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-          
           <div className="text-center md:text-left">
             <h1 className="text-3xl font-bold">BarberShop • Peluquería</h1>
             <p className="text-sm text-slate-300">
@@ -208,35 +207,67 @@ export default function Page() {
             </p>
           </div>
 
-          <nav className="flex gap-2 text-sm">
-            <button
-              onClick={goToIntro}
-              className="rounded-full px-4 py-1.5 bg-slate-800 text-slate-200 hover:bg-slate-700"
-            >
-              Introducción
-            </button>
+          {/* NAV CON LOGIN + EMAIL */}
+          <nav className="flex flex-col items-end gap-2 text-sm">
+            <div className="flex gap-2">
+              <button
+                onClick={goToIntro}
+                className="rounded-full px-4 py-1.5 bg-slate-800 text-slate-200 hover:bg-slate-700"
+              >
+                Introducción
+              </button>
 
-            <button
-              onClick={() => setPage("services")}
-              className={`rounded-full px-4 py-1.5 ${
-                page === "services"
-                  ? "bg-cyan-500 text-slate-900 font-semibold"
-                  : "bg-slate-800 text-slate-200 hover:bg-slate-700"
-              }`}
-            >
-              Servicios
-            </button>
+              <button
+                onClick={() => setPage("services")}
+                className={`rounded-full px-4 py-1.5 ${
+                  page === "services"
+                    ? "bg-cyan-500 text-slate-900 font-semibold"
+                    : "bg-slate-800 text-slate-200 hover:bg-slate-700"
+                }`}
+              >
+                Servicios
+              </button>
 
-            <button
-              onClick={() => setPage("locations")}
-              className={`rounded-full px-4 py-1.5 ${
-                page === "locations"
-                  ? "bg-cyan-500 text-slate-900 font-semibold"
-                  : "bg-slate-800 text-slate-200 hover:bg-slate-700"
-              }`}
-            >
-              Locales
-            </button>
+              <button
+                onClick={() => setPage("locations")}
+                className={`rounded-full px-4 py-1.5 ${
+                  page === "locations"
+                    ? "bg-cyan-500 text-slate-900 font-semibold"
+                    : "bg-slate-800 text-slate-200 hover:bg-slate-700"
+                }`}
+              >
+                Locales
+              </button>
+
+              {/* BOTÓN LOGIN / LOGOUT */}
+              {user ? (
+                <button
+                  onClick={async () => {
+                    await signOut(auth);
+                    setUser(null);
+                    router.push("/");
+                  }}
+                  className="rounded-full px-4 py-1.5 bg-red-500 text-slate-900 font-semibold hover:bg-red-400"
+                >
+                  Cerrar sesión
+                </button>
+              ) : (
+                <button
+                  onClick={() => router.push("/login")}
+                  className="rounded-full px-4 py-1.5 bg-emerald-500 text-slate-900 font-semibold hover:bg-emerald-400"
+                >
+                  Iniciar sesión
+                </button>
+              )}
+            </div>
+
+            {/* TEXTO USUARIO CONECTADO */}
+            {user && (
+              <p className="text-xs text-slate-400">
+                Conectado como:{" "}
+                <span className="font-semibold">{user.email}</span>
+              </p>
+            )}
           </nav>
         </div>
       </header>
