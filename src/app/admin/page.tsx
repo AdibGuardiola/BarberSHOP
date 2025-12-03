@@ -17,6 +17,30 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/Card";
 // 👈 CAMBIA esto si quieres usar otro correo como admin
 const ADMIN_EMAIL = "cliente1@gmail.com";
 
+// Convierte valores que pueden venir como string o como objeto { es, en } a texto seguro
+const formatMaybeLocalized = (value: unknown): string => {
+  if (value == null) return "";
+  if (typeof value === "string") return value;
+
+  if (typeof value === "object") {
+    const v = value as Record<string, unknown>;
+
+    if (typeof v.es === "string") return v.es;
+    if (typeof v.en === "string") return v.en;
+
+    const first = Object.values(v)[0];
+    if (typeof first === "string") return first;
+
+    try {
+      return JSON.stringify(value);
+    } catch {
+      return String(value);
+    }
+  }
+
+  return String(value);
+};
+
 type OrderItem = {
   service: {
     id: string;
@@ -205,7 +229,7 @@ export default function AdminPage() {
                         <div className="text-xs text-slate-200">
                           Cliente:{" "}
                           <span className="font-semibold">
-                            {order.bookingName}
+                            {formatMaybeLocalized(order.bookingName)}
                           </span>
                           {order.bookingDate && order.bookingTime && (
                             <>
@@ -220,7 +244,8 @@ export default function AdminPage() {
                       <ul className="text-xs text-slate-200">
                         {order.cart.map((item, idx) => (
                           <li key={idx}>
-                            {item.quantity}× {item.service.name} (
+                            {item.quantity}×{" "}
+                            {formatMaybeLocalized(item.service.name)} (
                             {item.service.price} €)
                           </li>
                         ))}
@@ -265,7 +290,9 @@ export default function AdminPage() {
                       </div>
                       <div>
                         Servicio:{" "}
-                        <span className="font-semibold">{r.serviceId}</span>
+                        <span className="font-semibold">
+                          {formatMaybeLocalized(r.serviceId)}
+                        </span>
                       </div>
                       <div>
                         Rating:{" "}
@@ -286,5 +313,3 @@ export default function AdminPage() {
     </div>
   );
 }
-
-
