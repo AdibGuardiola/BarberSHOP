@@ -10,7 +10,7 @@ import {
   query,
   Timestamp,
 } from "firebase/firestore";
-import { auth, db, hasFirebaseConfig } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import Button from "@/components/Button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/Card";
 
@@ -57,47 +57,24 @@ export default function AdminPage() {
 
   const router = useRouter();
 
-  if (!hasFirebaseConfig)
-    return (
-      <main className="min-h-screen bg-slate-900 text-slate-100 p-6">
-        <Card className="max-w-2xl bg-slate-900/70 border border-amber-400/40">
-          <CardHeader>
-            <CardTitle>Configura Firebase</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3 text-sm text-amber-100">
-            <p>
-              Añade las variables <strong>NEXT_PUBLIC_FIREBASE_*</strong> en tu
-              entorno para acceder al panel de admin y cargar reservas.
-            </p>
-            <p>
-              Sin ellas, Netlify mostrará la página pero no podrá conectarse a
-              Firestore.
-            </p>
-          </CardContent>
-        </Card>
-      </main>
-    );
-
   // ▶️ Escuchamos la sesión
   useEffect(() => {
-    if (!auth) return undefined;
-
     const unsub = onAuthStateChanged(auth, (u) => {
       setUser(u);
       setLoadingUser(false);
     });
     return () => unsub();
-  }, [auth]);
+  }, []);
 
   // ▶️ Cargamos orders + ratings SOLO si el usuario es el admin
   useEffect(() => {
-    if (!db || !user || user.email !== ADMIN_EMAIL) return;
+    if (!user || user.email !== ADMIN_EMAIL) return;
 
     const load = async () => {
       try {
         // ---- ORDERS ----
         const ordersSnap = await getDocs(
-          query(collection(db!, "orders"), orderBy("createdAt", "desc"))
+          query(collection(db, "orders"), orderBy("createdAt", "desc"))
         );
 
         const ordersData: Order[] = ordersSnap.docs.map((doc) => {
@@ -127,7 +104,7 @@ export default function AdminPage() {
 
         // ---- RATINGS ----
         const ratingsSnap = await getDocs(
-          query(collection(db!, "ratings"), orderBy("createdAt", "desc"))
+          query(collection(db, "ratings"), orderBy("createdAt", "desc"))
         );
 
         const ratingsData: Rating[] = ratingsSnap.docs.map((doc) => {
@@ -155,7 +132,7 @@ export default function AdminPage() {
     };
 
     load();
-  }, [db, user]);
+  }, [user]);
 
   // ---- ESTADOS DE PANTALLA ----
 

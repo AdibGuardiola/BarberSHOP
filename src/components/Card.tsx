@@ -1,7 +1,4 @@
-"use client";
-
 import React from "react";
-import { usePreferences } from "@/context/PreferencesContext";
 
 type CardProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -10,21 +7,25 @@ function cx(base: string, extra?: string) {
 }
 
 export function Card(props: CardProps) {
-  const { theme } = usePreferences();
-  const isDark = theme === "dark";
-  const base = isDark
-    ? "rounded-2xl border border-slate-700 bg-slate-900/80 p-6 shadow-lg shadow-black/40"
-    : "rounded-2xl border border-slate-200 bg-white p-6 shadow-md";
-
   return (
-    <div {...props} className={cx(base, props.className)}>
+    <div
+      {...props}
+      className={cx(
+        "rounded-2xl border border-slate-200/20 bg-white/10 p-6 shadow backdrop-blur",
+        props.className
+      )}
+    >
       {props.children}
     </div>
   );
 }
 
 export function CardHeader(props: CardProps) {
-  return <div {...props} className={cx("mb-3", props.className)}>{props.children}</div>;
+  return (
+    <div {...props} className={cx("mb-3", props.className)}>
+      {props.children}
+    </div>
+  );
 }
 
 export function CardTitle(props: CardProps) {
@@ -39,5 +40,14 @@ export function CardTitle(props: CardProps) {
 }
 
 export function CardContent(props: CardProps) {
-  return <div {...props} className={props.className}>{props.children}</div>;
+  return (
+    <div {...props} className={props.className}>
+      {props.children}
+    </div>
+  );
 }
+
+
+
+
+

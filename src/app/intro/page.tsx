@@ -35,27 +35,6 @@ const IntroPage: React.FC = () => {
           });
         });
 
-        // Entrada y movimiento sutil del collage de fotos al cargar
-        gsap.from(`.${styles.photoItem}`, {
-          opacity: 0,
-          y: 40,
-          scale: 0.95,
-          rotate: -2,
-          duration: 1.2,
-          ease: "power3.out",
-          stagger: 0.08,
-        });
-
-        gsap.to(`.${styles.photoItem}`, {
-          y: "+=10",
-          rotate: -0.5,
-          duration: 4,
-          yoyo: true,
-          repeat: -1,
-          ease: "sine.inOut",
-          stagger: { amount: 1.4, from: "edges" },
-        });
-
         // Entrada de los títulos
         gsap.from(`.${styles.introTitleLine}`, {
           yPercent: 100,
