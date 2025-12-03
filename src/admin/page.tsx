@@ -12,6 +12,22 @@ type CartSidebarProps = {
   onConfirm: () => void;
 };
 
+// Helper para obtener un texto seguro desde un campo localizado
+const getServiceName = (name: unknown): string => {
+  if (typeof name === "string") return name;
+
+  if (name && typeof name === "object") {
+    const field = name as { value?: string; es?: string; en?: string };
+
+    if (typeof field.value === "string") return field.value;
+    if (typeof field.es === "string") return field.es;
+    if (typeof field.en === "string") return field.en;
+  }
+
+  // Fallback: convertir a string para que React pueda renderizarlo
+  return String(name ?? "");
+};
+
 const CartSidebar: React.FC<CartSidebarProps> = ({
   cart,
   total,
@@ -55,7 +71,9 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
                         className="flex items-start justify-between gap-3 border-b border-slate-700/70 pb-2 last:border-0"
                       >
                         <div>
-                          <p className="font-medium">{item.service.name}</p>
+                          <p className="font-medium">
+                            {getServiceName(item.service.name)}
+                          </p>
                           <p className="text-xs text-slate-400">
                             {item.quantity} ×{" "}
                             {item.service.price > 0
@@ -125,15 +143,6 @@ const CartSidebar: React.FC<CartSidebarProps> = ({
 };
 
 export default CartSidebar;
-
-
-
-
-
-
-
-
-
 
 
 
