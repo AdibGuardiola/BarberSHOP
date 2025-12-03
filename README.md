@@ -62,3 +62,9 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Despliegue en Netlify
+
+- Cada push a la rama configurada en Netlify dispara un build automático; si no ves los cambios, fuerza un **Deploy site** manual desde el panel de Netlify.
+- Configura todas las variables `NEXT_PUBLIC_FIREBASE_*` en **Site settings → Environment variables** para habilitar login, reservas y valoraciones.
+- Tras un despliegue, recarga el sitio con **Ctrl/Cmd + Shift + R** para evitar caché del navegador y ver la versión más reciente.
