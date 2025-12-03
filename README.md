@@ -2,9 +2,31 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Proyecto BarberSHOP
 
-Aplicación web para una barbería y salón de belleza con catálogo de servicios, reservas y autenticación.
-Incluye carrito persistente en el navegador, gestión de citas y valoraciones respaldadas con Firebase.
-La interfaz principal se encuentra en `src/app/page.tsx`, junto con los componentes de servicios y ubicación en `src/components`.
+Aplicación web para barbería/salón con catálogo de servicios, reservas y autenticación.
+
+### Funcionalidades clave
+- Carrito persistente en el navegador con resumen de precios y limpieza rápida.
+- Agendado de citas que envía la reserva a la colección `orders` de Firebase Firestore.
+- Valoración de servicios (1-5 ⭐) almacenada en la colección `ratings` en Firestore.
+- Navegación entre catálogo (`services`) y ubicaciones (`locations`) desde la vista principal.
+- Redirección a `/login` si se intenta reservar o valorar sin sesión iniciada.
+
+### Estructura rápida
+- Página principal: `src/app/page.tsx` reúne catálogo, agenda y sidebar de carrito.
+- Componentes de UI: `src/components` (botones, tarjetas, sidebar, mapa de sedes).
+- Integración con Firebase: `src/lib/firebase.ts` inicializa Auth y Firestore.
+
+### Configuración de entorno
+Define las variables `NEXT_PUBLIC_FIREBASE_*` en un `.env.local` con las credenciales de tu proyecto Firebase:
+
+```bash
+NEXT_PUBLIC_FIREBASE_API_KEY="..."
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="..."
+NEXT_PUBLIC_FIREBASE_PROJECT_ID="..."
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET="..."
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID="..."
+NEXT_PUBLIC_FIREBASE_APP_ID="..."
+```
 
 ## Getting Started
 
