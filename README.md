@@ -1,5 +1,11 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Proyecto BarberSHOP
+
+Aplicación web para una barbería y salón de belleza con catálogo de servicios, reservas y autenticación.
+Incluye carrito persistente en el navegador, gestión de citas y valoraciones respaldadas con Firebase.
+La interfaz principal se encuentra en `src/app/page.tsx`, junto con los componentes de servicios y ubicación en `src/components`.
+
 ## Getting Started
 
 First, run the development server:
